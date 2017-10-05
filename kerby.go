@@ -17,6 +17,7 @@ package kerby
 
 /*
 #cgo CFLAGS: -std=gnu99
+#cgo CFLAGS: -Wno-deprecated-declarations
 #cgo LDFLAGS: -lgssapi_krb5 -lkrb5 -lk5crypto -lcom_err
 #include "kerberosgss.h"
 #include <stdio.h>
