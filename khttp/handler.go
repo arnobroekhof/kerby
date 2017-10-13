@@ -2,7 +2,7 @@ package khttp
 
 import (
 	"fmt"
-	"github.com/ubccr/kerby"
+	"github.com/arnobroekhof/kerby"
 	"log"
 	"net/http"
 	"strings"

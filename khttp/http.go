@@ -24,7 +24,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/ubccr/kerby"
+	"github.com/arnobroekhof/kerby"
 )
 
 var (

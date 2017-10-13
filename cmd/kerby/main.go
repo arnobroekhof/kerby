@@ -25,8 +25,8 @@ import (
 	"os"
 	"strings"
 
-	"github.com/ubccr/kerby"
-	"github.com/ubccr/kerby/khttp"
+	"github.com/arnobroekhof/kerby"
+	"github.com/arnobroekhof/kerby/khttp"
 )
 
 var (

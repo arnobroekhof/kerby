@@ -71,7 +71,7 @@ func (kc *KerbClient) Init(srv, princ string) error {
 
 	kc.state = C.new_gss_client_state()
 	if kc.state == nil {
-		return errors.New("Failed to allocate memory for gss_client_state")
+		return errors.New("failed to allocate memory for gss_client_state")
 	}
 
 	result = int(C.authenticate_gss_client_init(service, principal, gss_flags, delegatestate, kc.state))
@@ -95,7 +95,7 @@ func (kc *KerbClient) Step(chlg string) error {
 	result := 0
 
 	if kc.state == nil {
-		return errors.New("Invalid client state")
+		return errors.New("invalid client state")
 	}
 
 	result = int(C.authenticate_gss_client_step(kc.state, challenge))
@@ -131,17 +131,17 @@ func ServerPrincipalDetails(service, hostname string) (string, error) {
 
 	code = C.krb5_init_context(&kcontext)
 	if code != 0 {
-		return "", fmt.Errorf("Cannot initialize Kerberos5 context: %d", code)
+		return "", fmt.Errorf("cannot initialize Kerberos5 context: %d", code)
 	}
 
 	code = C.krb5_kt_default(kcontext, &kt)
 	if code != 0 {
-		return "", fmt.Errorf("Cannot get default keytab: %d", int(code))
+		return "", fmt.Errorf("cannot get default keytab: %d", int(code))
 	}
 
 	code = C.krb5_kt_start_seq_get(kcontext, kt, &cursor)
 	if code != 0 {
-		return "", fmt.Errorf("Cannot get sequence cursor from keytab: %d", int(code))
+		return "", fmt.Errorf("cannot get sequence cursor from keytab: %d", int(code))
 	}
 
 	result := ""
@@ -149,11 +149,6 @@ func ServerPrincipalDetails(service, hostname string) (string, error) {
 		code = C.krb5_kt_next_entry(kcontext, kt, &entry, &cursor)
 		if code != 0 {
 			break
-		}
-
-		code = C.krb5_unparse_name(kcontext, entry.principal, &pname)
-		if code != 0 {
-			return "", fmt.Errorf("Cannot parse principal name from keytab: %d", int(code))
 		}
 
 		result = C.GoString(pname)
@@ -169,7 +164,7 @@ func ServerPrincipalDetails(service, hostname string) (string, error) {
 	}
 
 	if len(result) == 0 {
-		return "", errors.New("Principal not found in keytab")
+		return "", errors.New("principal not found in keytab")
 	}
 
 	if cursor != nil {
@@ -208,7 +203,7 @@ func (ks *KerbServer) Init(srv string) error {
 
 	ks.state = C.new_gss_server_state()
 	if ks.state == nil {
-		return errors.New("Failed to allocate memory for gss_server_state")
+		return errors.New("failed to allocate memory for gss_server_state")
 	}
 
 	result = int(C.authenticate_gss_server_init(service, ks.state))
@@ -246,7 +241,7 @@ func (ks *KerbServer) Step(chlg string) error {
 	result := 0
 
 	if ks.state == nil {
-		return errors.New("Invalid client state")
+		return errors.New("invalid client state")
 	}
 
 	result = int(C.authenticate_gss_server_step(ks.state, challenge))
