@@ -66,7 +66,7 @@ func (kc *KerbClient) Init(srv, princ string) error {
 	defer C.free(unsafe.Pointer(principal))
 
 	var delegatestate *C.gss_server_state
-	gss_flags := C.long(C.GSS_C_MUTUAL_FLAG | C.GSS_C_SEQUENCE_FLAG)
+	gss_flags := C.long(C.GSS_C_DELEG_FLAG | C.GSS_C.GSS_C_MUTUAL_FLAG | C.GSS_C_SEQUENCE_FLAG)
 	result := 0
 
 	kc.state = C.new_gss_client_state()
