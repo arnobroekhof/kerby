@@ -42,6 +42,8 @@ type Transport struct {
 	Principal string
 	// Next specifies the next transport to be used or http.DefaultTransport if nil.
 	Next http.RoundTripper
+	// Mutual Authentication, if set to true the client checks the Negotiate response from the server
+	Mutual bool
 }
 
 // RoundTrip executes a single HTTP transaction performing SPNEGO negotiate
@@ -83,15 +85,17 @@ func (t *Transport) RoundTrip(req *http.Request) (*http.Response, error) {
 	}
 
 	authReply := strings.Split(resp.Header.Get(wwwAuthenticateHeader), " ")
-	if len(authReply) != 2 || strings.ToLower(authReply[0]) != strings.ToLower(negotiateHeader) {
-		return nil, errors.New("khttp: server replied with invalid www-authenticate header")
-	}
 
-	// Authenticate the reply from the server
-	err = kc.Step(authReply[1])
-	if err != nil {
-		return nil, err
-	}
+	if t.Mutual {
+		if len(authReply) != 2 || strings.ToLower(authReply[0]) != strings.ToLower(negotiateHeader) {
+			return nil, errors.New("khttp: server replied with invalid www-authenticate header")
+		}
 
+		// Authenticate the reply from the server
+		err = kc.Step(authReply[1])
+		if err != nil {
+			return nil, err
+		}
+	}
 	return resp, nil
 }
